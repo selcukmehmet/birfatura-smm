@@ -1,6 +1,6 @@
 # Github ---> Gitlab repository mirroring
 
-1. Gitlab'da sync edilecek project oluşturulur. (Örnek proje adı: smm)
+1. Gitlab'da sync edilecek project oluşturulur. (Örnek proje adı: smm, tek taraflı commit olacağı için projede protected branchler için force izni verilir)
 2. Gitlab'da yeni bir kullanıcı oluşturulur. (Örnek kullanıcı adı: smmuser)
 3. Oluşturulan kullanıcı yeni project altında maintainer olarak yetkilendirilir (Projects -->> smm -->> Manage access -->> Invite Members, eklenditen sonra role maintainer olarak belirlenir)
 4. Mirrorring için project ayarlarından access token oluşturulur. Bu acces token maintainer rolüne sahip olmalıdır (Projects -->> Settings -->> Access Tokens, Örneğin "GITLAB_TOKEN")

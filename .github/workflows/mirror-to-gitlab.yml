@@ -32,8 +32,8 @@ jobs:
             git remote add ${REMOTE_NAME} "http://oauth2:${GITLAB_TOKEN}@tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
           fi
 
-          git push ${REMOTE_NAME} --all
-          git push ${REMOTE_NAME} --tags
+          git push ${REMOTE_NAME} --all --force
+          git push ${REMOTE_NAME} --tags --force
 
           for branch in $(git ls-remote --heads ${REMOTE_NAME} | awk '{print $2}' | sed 's|refs/heads/||'); do
             if [ "$branch" = "main" ]; then
