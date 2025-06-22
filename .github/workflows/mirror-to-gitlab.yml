@@ -25,7 +25,7 @@ jobs:
         run: |
           # The repository path in GitLab
           GITLAB_PROJECT_PATH="birfatura/smm.git"   # <namespace>/<repo>.git; change 'root' if needed!
-          GITLAB_URL="https://tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
+          GITLAB_URL="http://tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
           # Add GitLab remote using the token
           git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
           # Push all refs (branches, tags)
