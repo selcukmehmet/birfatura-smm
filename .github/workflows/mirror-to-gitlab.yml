@@ -2,8 +2,7 @@ name: Mirror to Local GitLab
 
 on:
   push:
-    branches: [ "**" ]   # Mirror all branches
-  # optionally: add schedule, workflow_dispatch etc.
+    branches: [ "**" ]
 
 jobs:
   mirror:
@@ -23,11 +22,10 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          GITLAB_PROJECT_PATH="birfatura/smm.git"   # Change if your namespace is different
+          GITLAB_PROJECT_PATH="birfatura/smm.git"
           GITLAB_URL="http://tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
           REMOTE_NAME="gitlab"
 
-          # Check if remote exists; if yes, set-url, else add
           if git remote | grep -q "^${REMOTE_NAME}$"; then
             git remote set-url ${REMOTE_NAME} "http://oauth2:${GITLAB_TOKEN}@tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
           else
@@ -36,4 +34,10 @@ jobs:
 
           git push ${REMOTE_NAME} --all
           git push ${REMOTE_NAME} --tags
-          git push ${REMOTE_NAME} --prune
+
+          for branch in $(git ls-remote --heads ${REMOTE_NAME} | awk '{print $2}' | sed 's|refs/heads/||'); do
+            if ! git show-ref --verify --quiet refs/heads/$branch; then
+              echo "Deleting remote branch: $branch"
+              git push ${REMOTE_NAME} --delete $branch
+            fi
+          done
