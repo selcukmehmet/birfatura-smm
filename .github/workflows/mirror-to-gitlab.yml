@@ -36,3 +36,4 @@ jobs:
 
           git push ${REMOTE_NAME} --all
           git push ${REMOTE_NAME} --tags
+          git push ${REMOTE_NAME} --prune
