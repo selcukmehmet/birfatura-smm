@@ -1,3 +1,10 @@
+name: Mirror to Local GitLab
+
+on:
+  push:
+    branches: [ "**" ]   # Mirror all branches
+  # optionally: add schedule, workflow_dispatch etc.
+
 jobs:
   mirror:
     runs-on: [self-hosted, smm-runner01]
