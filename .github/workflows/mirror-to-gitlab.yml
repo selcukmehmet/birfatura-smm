@@ -1,18 +1,11 @@
-name: Mirror to Local GitLab
-
-on:
-  push:
-    branches: [ "**" ]   # Mirror all branches
-  # optionally: add schedule, workflow_dispatch etc.
-
 jobs:
   mirror:
-    runs-on: [self-hosted, smm-runner01] # ensure your runner is picked
+    runs-on: [self-hosted, smm-runner01]
     steps:
       - name: Checkout source repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0   # fetch all history/branches
+          fetch-depth: 0
 
       - name: Set up Git config for push
         run: |
@@ -23,10 +16,15 @@ jobs:
         env:
           GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
         run: |
-          # The repository path in GitLab
-          GITLAB_PROJECT_PATH="birfatura/smm.git"   # <namespace>/<repo>.git; change 'root' if needed!
+          GITLAB_PROJECT_PATH="birfatura/smm.git"   # Change if your namespace is different
           GITLAB_URL="http://tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
-          # Add GitLab remote using the token
-          git remote add gitlab "https://oauth2:${GITLAB_TOKEN}@tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
-          # Push all refs (branches, tags)
-          git push --mirror gitlab
+          REMOTE_NAME="gitlab"
+
+          # Check if remote exists; if yes, set-url, else add
+          if git remote | grep -q "^${REMOTE_NAME}$"; then
+            git remote set-url ${REMOTE_NAME} "http://oauth2:${GITLAB_TOKEN}@tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
+          else
+            git remote add ${REMOTE_NAME} "http://oauth2:${GITLAB_TOKEN}@tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
+          fi
+
+          git push --mirror ${REMOTE_NAME}
