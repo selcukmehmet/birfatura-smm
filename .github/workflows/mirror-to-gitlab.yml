@@ -34,4 +34,4 @@ jobs:
             git remote add ${REMOTE_NAME} "http://oauth2:${GITLAB_TOKEN}@tk-gitlab01-br1.tk.local/${GITLAB_PROJECT_PATH}"
           fi
 
-          git push --mirror ${REMOTE_NAME}
+          git push --mirror --force ${REMOTE_NAME}
