@@ -36,6 +36,10 @@ jobs:
           git push ${REMOTE_NAME} --tags
 
           for branch in $(git ls-remote --heads ${REMOTE_NAME} | awk '{print $2}' | sed 's|refs/heads/||'); do
+            if [ "$branch" = "main" ]; then
+              echo "Skipping protected branch: $branch"
+              continue
+            fi
             if ! git show-ref --verify --quiet refs/heads/$branch; then
               echo "Deleting remote branch: $branch"
               git push ${REMOTE_NAME} --delete $branch
